@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>Registrati - Il Blog dei Mario</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+</head>
+<body>
+
+<div id="top-marquee">
+    <span>★ REGISTRATI AL BLOG ★ Unisciti alla community! ★ Solo i MARIO possono entrare! ★</span>
+</div>
+
+<div id="main-header">
+    <h1>✦ Il Blog dei Mario ✦</h1>
+    <div class="tagline">~ La casa digitale di tutti i Mario dal 2003 ~</div>
+</div>
+
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<div style="width:800px; margin:20px auto; text-align:center;">
+
+    <div class="content-box" style="display:inline-block; width:500px; text-align:left;">
+        <div class="content-box-title">📝 Registrazione Nuovo Mario</div>
+
+        <div style="padding:15px; font-size:12px;">
+            <p style="margin-bottom:10px; font-weight:bold; color:#000080;">
+                Benvenuto! Per scrivere sul blog devi registrarti.
+                <span style="color:#CC0000;">⚠️ ATTENZIONE: Il tuo nome deve contenere "Mario"!</span>
+            </p>
+
+            <form onsubmit="doRegister(event)">
+                <table cellpadding="5" style="width:100%; font-size:12px;">
+                    <tr>
+                        <td style="width:120px; font-weight:bold;">Nome Completo:</td>
+                        <td><input type="text" id="reg-name" placeholder="Es. Maria Giuliacci" maxlength="50"
+                            style="border:2px inset #AAAAAA; padding:3px; width:100%; font-family:'Comic Sans MS',cursive;"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Username:</td>
+                        <td><input type="text" id="reg-username" placeholder="Es. super_mario" maxlength="20"
+                            style="border:2px inset #AAAAAA; padding:3px; width:100%; font-family:'Comic Sans MS',cursive;"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Password:</td>
+                        <td><input type="password" id="reg-password" placeholder="Min. 4 caratteri"
+                            style="border:2px inset #AAAAAA; padding:3px; width:100%; font-family:'Comic Sans MS',cursive;"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Avatar (Emoji):</td>
+                        <td>
+                            <select id="reg-avatar" style="border:2px inset #AAAAAA; padding:3px; width:100%; font-family:'Comic Sans MS',cursive;">
+                                <option value="😎">😎 Ragazzo figo</option>
+                                <option value="🍄">🍄 Fungo magico</option>
+                                <option value="⚽">⚽ Calciatore</option>
+                                <option value="🍕">🍕 Pizzaiolo</option>
+                                <option value="🏎️">🏎️ Pilota</option>
+                                <option value="👾">👾 Gamer</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; vertical-align:top;">Bio / Chi sei:</td>
+                        <td><textarea id="reg-bio" rows="4" placeholder="Parlaci un po' di te..."
+                            style="border:2px inset #AAAAAA; padding:3px; width:100%; font-family:'Comic Sans MS',cursive; resize:vertical;"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="padding-top:10px;">
+                            <button type="submit" class="button-3d" style="font-size:14px; padding:5px 15px;">🚀 Registrati!</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+            <div id="reg-error" style="display:none; color:red; font-weight:bold; margin-top:10px; padding:5px; border:1px dashed red; background:#FFEEEE;"></div>
+
+            <div style="margin-top:15px; font-size:11px; text-align:center;">
+                Hai già un account? <a href="login.html" style="color:#0000CC; font-weight:bold;">Torna al Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="main-footer">
+    <div class="ie-disclaimer">★ Best viewed in IE 6.0 ★ | © 2003 Il Blog dei Mario</div>
+</div>
+
+<script>
+function doRegister(e) {
+    e.preventDefault();
+    var name = document.getElementById('reg-name').value.trim();
+    var username = document.getElementById('reg-username').value.trim();
+    var password = document.getElementById('reg-password').value;
+    var bio = document.getElementById('reg-bio').value.trim();
+    var avatar = document.getElementById('reg-avatar').value;
+
+    var res = registerUser(name, username, password, bio, avatar);
+
+    if (!res.ok) {
+        var errBox = document.getElementById('reg-error');
+        errBox.textContent = "❌ " + res.error;
+        errBox.style.display = "block";
+    } else {
+        alert("Benvenuto tra i Mario, " + name + "!! 🎉\nOra puoi effettuare il login.");
+        window.location.href = "login.html";
+    }
+}
+</script>
+
+</body>
+</html>

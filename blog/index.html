@@ -1,0 +1,511 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>Il Blog dei Mario :: La community di tutti i Mario!</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+    <style>
+        /* ===== STILI EXTRA INDEX ===== */
+        .author-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #EEEEFF;
+            border: 1px solid #CCCCFF;
+            padding: 3px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000080;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .author-chip:hover { background: #CCCCFF; }
+
+        .join-banner {
+            background: linear-gradient(135deg, #9900CC, #CC00FF, #FF00CC);
+            border: 3px ridge #9900CC;
+            padding: 10px 14px;
+            margin: 20px auto 10px auto;
+            text-align: center;
+            color: #FFFFFF;
+            font-size: 13px;
+        }
+        .join-banner strong { font-size: 15px; display: block; margin-bottom: 5px; }
+        .join-banner .join-btn {
+            display: inline-block;
+            background: #FFFF00;
+            color: #000080;
+            font-family: "Comic Sans MS", cursive;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 5px 16px;
+            border: 3px outset #FFFFFF;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 4px 4px 0;
+        }
+        .join-btn:hover { background: #FFFFAA; }
+        .join-btn:active { border-style: inset; }
+
+        .mario-card {
+            border: 2px outset #CCCCFF;
+            padding: 6px;
+            margin-bottom: 5px;
+            background: #F5F5FF;
+            text-align: center;
+            font-size: 10px;
+        }
+        .mario-card .mario-avatar { font-size: 28px; display: block; }
+        .mario-card a { color: #0000CC; text-decoration: underline; }
+
+        .post-author-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 3px 0 5px;
+            font-size: 11px;
+        }
+        .post-author-avatar { font-size: 18px; }
+
+        .pagination-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        .page-active {
+            background: #0000AA;
+            color: #FFFF00;
+            font-weight: bold;
+            padding: 3px 10px;
+            border: 2px inset #AAAAFF;
+            font-size: 13px;
+        }
+
+        .hot-badge {
+            display: inline-block;
+            background: #FF3300;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 1px 5px;
+            border: 1px outset #FF6666;
+            margin-left: 3px;
+            vertical-align: middle;
+        }
+
+        .category-pill {
+            display: inline-block;
+            padding: 1px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #FFF;
+            border: 1px outset #FFFFFF;
+            cursor: pointer;
+            margin-right: 2px;
+            margin-bottom: 2px;
+            text-decoration: none;
+        }
+        .cat-tech    { background: #0000AA; }
+        .cat-vita    { background: #009900; }
+        .cat-cinema  { background: #990099; }
+        .cat-sport   { background: #AA0000; }
+        .cat-pensieri{ background: #996600; }
+        .cat-musica  { background: #006699; }
+        .cat-other   { background: #444444; }
+
+        #online-users {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            background: #001100;
+            border: 2px inset #003300;
+            color: #00FF00;
+            font-family: "Courier New", monospace;
+            font-size: 10px;
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP MARQUEE -->
+<div id="top-marquee">
+    <span>
+        ★ BENVENUTO NEL BLOG DEI MARIO ★ &nbsp;&nbsp;&nbsp;
+        Oggi è: <span id="today-date"></span> &nbsp;&nbsp;&nbsp;
+        ★ LA COMMUNITY DI TUTTI I MARIO D'ITALIA E DEL MONDO! ★ &nbsp;&nbsp;&nbsp;
+        Sei un Mario? REGISTRATI e scrivi sul blog! &nbsp;&nbsp;&nbsp;
+        ★ FIRMA IL GUESTBOOK ★ &nbsp;&nbsp;&nbsp;
+        ☆ SITO IN CONTINUA ESPANSIONE ☆ &nbsp;&nbsp;&nbsp;
+    </span>
+</div>
+
+<!-- MAIN HEADER -->
+<div id="main-header">
+    <h1>✦ Il Blog dei Mario ✦</h1>
+    <div class="tagline">~ La community di tutti i Mario dal 2003 — Scrivi, condividi, commenta! ~</div>
+    <div style="margin-top:6px; font-size:11px; color:#FFFF99;" id="header-status">
+        <span class="online-dot"></span> <span id="header-user-info">Caricamento...</span>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<!-- BANNER REGISTRAZIONE (visibile solo se non loggato) -->
+<div id="join-banner-container"></div>
+
+<!-- MAIN LAYOUT -->
+<table id="layout-table" cellpadding="0" cellspacing="4">
+<tr>
+
+    <!-- SIDEBAR SINISTRA -->
+    <td class="sidebar-left">
+
+        <!-- VISITOR COUNTER -->
+        <div class="widget-box">
+            <div class="widget-title">👁 Visitatori</div>
+            <div class="widget-content" style="text-align:center; padding:6px 4px;">
+                <div style="font-size:10px; color:#666; margin-bottom:3px;">Visitatore n°</div>
+                <div id="visitor-counter">000000</div>
+                <div style="font-size:9px; color:#888; margin-top:3px;">dal 15 Marzo 2003</div>
+            </div>
+        </div>
+
+        <!-- METEO -->
+        <div class="widget-box">
+            <div class="widget-title">🌤 Meteo</div>
+            <div class="widget-content" style="text-align:center;">
+                <span class="meteo-icon" id="meteo-icon">⛅</span>
+                <div style="font-weight:bold; font-size:12px;" id="meteo-city">Milano</div>
+                <div style="font-size:18px; color:#FF6600; font-weight:bold;" id="meteo-temp">16°C</div>
+                <div style="font-size:10px; color:#555;" id="meteo-desc">Parzialmente nuvoloso</div>
+                <hr class="separator-rainbow" style="margin:4px 0;">
+                <div style="font-size:10px;">
+                    Ven: 🌧 12°C<br>
+                    Sab: ☀️ 20°C<br>
+                    Dom: ⛅ 17°C
+                </div>
+            </div>
+        </div>
+
+        <!-- UNDER CONSTRUCTION -->
+        <div class="widget-box">
+            <div class="widget-content under-construction" style="padding:6px; text-align:center;">
+                <span class="construction-icon">⚙️</span><br>
+                <strong>SITO IN</strong><br>
+                <strong>COSTRUZIONE!</strong><br>
+                <span class="construction-icon">🔧</span>
+            </div>
+        </div>
+
+        <!-- GUESTBOOK PREVIEW -->
+        <div class="widget-box">
+            <div class="widget-title">📖 Guestbook</div>
+            <div id="sidebar-guestbook-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <!-- AMICI MSN -->
+        <div class="widget-box">
+            <div class="widget-title">💬 Amici su MSN</div>
+            <div id="sidebar-msn" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <!-- MUSICA -->
+        <div class="widget-box">
+            <div class="widget-title">🎵 In Ascolto</div>
+            <div class="widget-content" style="text-align:center; font-size:11px;" id="now-playing">
+                <div style="font-size:20px;">🎧</div>
+                <strong>Linkin Park</strong><br>
+                <em>In The End</em><br>
+                <div style="font-size:9px; color:#888; margin-top:3px;">[ ◀ ▶ ■ ]</div>
+            </div>
+        </div>
+
+    </td>
+
+    <!-- CONTENUTO CENTRALE -->
+    <td class="content-center">
+
+        <!-- FILTRO CATEGORIA -->
+        <div class="content-box" style="margin-bottom:6px;">
+            <div class="content-box-title">🗂 FILTRA PER CATEGORIA</div>
+            <div style="padding:6px 8px;" id="category-filters">
+                <a class="category-pill cat-other" href="#" onclick="setFilter('all'); return false;">Tutti</a>
+                <a class="category-pill cat-tech" href="#" onclick="setFilter('Tecnologia'); return false;">Tecnologia</a>
+                <a class="category-pill cat-vita" href="#" onclick="setFilter('Vita Mia'); return false;">Vita Mia</a>
+                <a class="category-pill cat-cinema" href="#" onclick="setFilter('Cinema &amp; TV'); return false;">Cinema &amp; TV</a>
+                <a class="category-pill cat-sport" href="#" onclick="setFilter('Sport'); return false;">Sport</a>
+                <a class="category-pill cat-pensieri" href="#" onclick="setFilter('Pensieri'); return false;">Pensieri</a>
+            </div>
+        </div>
+
+        <!-- LISTA POST -->
+        <div class="content-box">
+            <div class="content-box-title" id="posts-title">✏️ ULTIMI POST — I Mario Scrivono!</div>
+            <div id="posts-container">
+                <div style="padding:20px; text-align:center;">Caricamento post... ⏳</div>
+            </div>
+        </div>
+
+        <!-- PAGINAZIONE -->
+        <div class="pagination-bar" id="pagination-container"></div>
+
+    </td>
+
+    <!-- SIDEBAR DESTRA -->
+    <td class="sidebar-right">
+
+        <!-- CHI SIAMO -->
+        <div class="widget-box">
+            <div class="widget-title">👥 Chi Siamo</div>
+            <div class="widget-content" style="text-align:center; font-size:10px;">
+                <div style="font-size:12px; color:#000080; font-weight:bold; margin-bottom:5px;">
+                    Il Blog dei Mario
+                </div>
+                <div style="font-size:10px; color:#555; line-height:1.6;">
+                    Una community per tutti i Mario d'Italia e del mondo!<br><br>
+                    Ti chiami Mario? Registrati e scrivi il tuo post!
+                </div>
+                <hr class="separator-rainbow" style="margin:6px 0;">
+                <a href="register.html">
+                    <button class="button-3d" style="width:90%; margin-bottom:3px; font-size:10px;">📝 Registrati!</button>
+                </a>
+                <a href="mario-list.html">
+                    <button class="button-3d" style="width:90%; font-size:10px;">👥 Tutti i Mario</button>
+                </a>
+            </div>
+        </div>
+
+        <!-- I NOSTRI MARIO -->
+        <div class="widget-box">
+            <div class="widget-title">⭐ I Nostri Mario</div>
+            <div id="mario-cards" class="widget-content"></div>
+        </div>
+
+        <!-- OROSCOPO -->
+        <div class="widget-box">
+            <div class="widget-title">🔮 Oroscopo</div>
+            <div id="sidebar-oroscopo" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <!-- SONDAGGIO -->
+        <div class="widget-box">
+            <div class="widget-title">📊 Sondaggio</div>
+            <div id="sidebar-poll-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <!-- TOP POST -->
+        <div class="widget-box">
+            <div class="widget-title">🔥 Post Più Visti</div>
+            <div id="top-posts" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+    </td>
+
+</tr>
+</table>
+
+<!-- FOOTER -->
+<div id="main-footer">
+    <div>
+        <a href="index.html">🏠 Home</a> |
+        <a href="archivio.html">📰 Archivio</a> |
+        <a href="guestbook.html">📖 Guestbook</a> |
+        <a href="mario-list.html">👥 I Mario</a> |
+        <a href="register.html">📝 Registrati</a> |
+        <a href="login.html">🔐 Login</a>
+    </div>
+    <div class="ie-disclaimer">
+        ★ Best viewed in Internet Explorer 6.0 at 800×600 ★<br>
+        © 2003 Il Blog dei Mario — La community per tutti i Mario! — Hosted by Splinder.com
+    </div>
+</div>
+
+<script>
+var currentPage = 1;
+var currentFilter = 'all';
+var POSTS_PER_PAGE = 3;
+
+// Mappe colori categoria
+var catColors = {
+    'Tecnologia':  '#0000AA',
+    'Vita Mia':    '#009900',
+    'Cinema & TV': '#990099',
+    'Sport':       '#AA0000',
+    'Pensieri':    '#996600',
+    'Musica':      '#006699'
+};
+
+function getCatColor(cat) {
+    return catColors[cat] || '#444444';
+}
+
+function getCatEmoji(cat) {
+    var map = { 'Tecnologia':'💻', 'Vita Mia':'🌟', 'Cinema & TV':'🎬', 'Sport':'⚽', 'Pensieri':'💭', 'Musica':'🎵' };
+    return map[cat] || '📝';
+}
+
+function getAuthorAvatar(username) {
+    var user = getUserByUsername(username);
+    return user ? user.avatar : '👤';
+}
+
+function setFilter(cat) {
+    currentFilter = cat;
+    currentPage = 1;
+    renderPosts();
+    document.getElementById('posts-title').textContent =
+        cat === 'all' ? '✏️ ULTIMI POST — I Mario Scrivono!' :
+        getCatEmoji(cat) + ' ' + cat.toUpperCase();
+    window.scrollTo(0, 300);
+}
+
+function goToPage(page) {
+    currentPage = page;
+    renderPosts();
+    window.scrollTo(0, 300);
+}
+
+function renderPosts() {
+    var allPosts = getPosts();
+    var filtered = currentFilter === 'all'
+        ? allPosts
+        : allPosts.filter(function(p) { return p.category === currentFilter; });
+
+    var totalPages = Math.max(1, Math.ceil(filtered.length / POSTS_PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    var start = (currentPage - 1) * POSTS_PER_PAGE;
+    var pagePosts = filtered.slice(start, start + POSTS_PER_PAGE);
+
+    var container = document.getElementById('posts-container');
+
+    if (pagePosts.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">Nessun post in questa categoria.</div>';
+        document.getElementById('pagination-container').innerHTML = '';
+        return;
+    }
+
+    container.innerHTML = pagePosts.map(function(p) {
+        var commentCount = getCommentCount(p.id);
+        var avatar = getAuthorAvatar(p.username);
+        var isNew = p.id === getPosts()[0].id; // il più recente
+        var isHot = p.views > 400;
+        var catColor = getCatColor(p.category);
+
+        return '<div class="post-preview">' +
+            '<div class="post-date">📅 ' + p.date + '</div>' +
+            '<div class="post-title">' +
+                '<a href="post.html?id=' + p.id + '">' + p.title + '</a>' +
+                (isNew ? '<span class="new-badge">NEW!</span>' : '') +
+                (isHot ? '<span class="hot-badge">🔥 HOT</span>' : '') +
+            '</div>' +
+            '<div class="post-author-bar">' +
+                '<span class="post-author-avatar">' + avatar + '</span>' +
+                '<a class="author-chip" href="profilo.html?username=' + (p.username || '') + '">' + p.author + '</a>' +
+                '<span style="display:inline-block; background:' + catColor + '; color:#FFF; font-size:10px; padding:1px 7px; font-weight:bold;">' +
+                    getCatEmoji(p.category) + ' ' + p.category +
+                '</span>' +
+                '<span class="hit-stars" style="font-size:11px;">' + p.stars + '</span>' +
+            '</div>' +
+            '<div class="post-excerpt">' + p.excerpt.substring(0, 180) + (p.excerpt.length > 180 ? '...' : '') + '</div>' +
+            '<div class="post-meta">' +
+                '<span>💬 <a href="post.html?id=' + p.id + '#commenti">' + commentCount + ' commenti</a></span>' +
+                ' &nbsp; <span>👁 ' + p.views + ' visite</span>' +
+                ' &nbsp; <span>' + (p.tags || []).slice(0,3).map(function(t) {
+                    return '<a href="archivio.html?tag=' + t + '" style="color:#0000CC;">#' + t + '</a>';
+                }).join(' ') + '</span>' +
+            '</div>' +
+            '<a class="read-more" href="post.html?id=' + p.id + '">Leggi tutto »</a>' +
+        '</div>';
+    }).join('');
+
+    // Paginazione
+    var paginationEl = document.getElementById('pagination-container');
+    if (totalPages <= 1) { paginationEl.innerHTML = ''; return; }
+
+    var pagHTML = '';
+    if (currentPage > 1) {
+        pagHTML += '<a class="nav-btn" href="#" onclick="goToPage(' + (currentPage-1) + '); return false;">&laquo; Prec</a>';
+    }
+    for (var i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            pagHTML += '<span class="page-active">' + i + '</span>';
+        } else {
+            pagHTML += '<a class="nav-btn" href="#" onclick="goToPage(' + i + '); return false;">' + i + '</a>';
+        }
+    }
+    if (currentPage < totalPages) {
+        pagHTML += '<a class="nav-btn" href="#" onclick="goToPage(' + (currentPage+1) + '); return false;">Succ &raquo;</a>';
+    }
+    paginationEl.innerHTML = pagHTML;
+}
+
+function renderSidebarExtras() {
+    // Top post
+    var topPosts = getPosts().sort(function(a,b){ return b.views - a.views; }).slice(0, 4);
+    document.getElementById('top-posts').innerHTML = topPosts.map(function(p) {
+        return '<a href="post.html?id=' + p.id + '" style="display:block; margin-bottom:3px;">' +
+               getAuthorAvatar(p.username) + ' ' + p.title.substring(0, 28) + '... ' +
+               '<span style="color:#888;">(👁 ' + p.views + ')</span></a>';
+    }).join('');
+
+    // Mario cards
+    var users = getUsers().slice(0, 4);
+    document.getElementById('mario-cards').innerHTML = users.map(function(u) {
+        var postCount = getPostsByUser(u.username).length;
+        return '<div class="mario-card">' +
+               '<span class="mario-avatar">' + u.avatar + '</span>' +
+               '<strong><a href="profilo.html?username=' + u.username + '">' + u.name + '</a></strong><br>' +
+               '<span style="color:#666;">@' + u.username + ' — ' + postCount + ' post</span>' +
+               '</div>';
+    }).join('');
+
+    // Banner registrazione (solo se non loggato)
+    var cu = getCurrentUser();
+    var bannerEl = document.getElementById('join-banner-container');
+    if (!cu) {
+        bannerEl.innerHTML =
+            '<div class="join-banner" style="width:800px; margin:0 auto 4px; box-sizing:border-box;">' +
+            '<strong>🍄 Sei un Mario? Questo blog è TUO! 🍄</strong>' +
+            'Registrati gratis e inizia a scrivere i tuoi post! Unitevi alla community più esclusiva del web!<br>' +
+            '<a class="join-btn" href="register.html">📝 REGISTRATI ORA!</a>' +
+            '<a class="join-btn" href="login.html" style="background:#AAFFAA;">🔐 HAI GIÀ UN ACCOUNT?</a>' +
+            '</div>';
+    } else {
+        bannerEl.innerHTML =
+            '<div style="width:800px; margin:0 auto 4px; padding:6px 10px; background:#001100; border:2px inset #003300; box-sizing:border-box; font-family:\'Courier New\',monospace; font-size:11px; color:#00FF00;">' +
+            '● BENVENUTO, ' + cu.avatar + ' <strong>' + cu.name.toUpperCase() + '</strong>! &nbsp;|&nbsp; ' +
+            '<a href="admin.html" style="color:#FFFF00;">✏️ Scrivi un post</a> &nbsp;|&nbsp; ' +
+            '<a href="profilo.html?username=' + cu.username + '" style="color:#FFFF00;">👤 Il tuo profilo</a> &nbsp;|&nbsp; ' +
+            '<a href="#" onclick="doLogout(); return false;" style="color:#FF6666;">🚪 Logout</a>' +
+            '</div>';
+    }
+
+    // Header status
+    var headerInfo = document.getElementById('header-user-info');
+    if (headerInfo) {
+        if (cu) {
+            headerInfo.innerHTML = 'Loggato come <strong>' + cu.name + '</strong> ' + cu.avatar +
+                ' &nbsp;|&nbsp; <a href="admin.html" style="color:#FFFF00;">✏️ Scrivi</a>';
+        } else {
+            headerInfo.innerHTML = '<span style="color:#FFFF99;">ONLINE</span>' +
+                ' &nbsp;|&nbsp; <a href="login.html" style="color:#FFFF00;">🔐 Login</a>' +
+                ' &nbsp;|&nbsp; <a href="register.html" style="color:#FFFF00;">📝 Registrati</a>' +
+                ' &nbsp;|&nbsp; <span class="blink" style="color:#FFFF00;">★ NUOVO POST!</span>';
+        }
+    }
+}
+
+    renderPosts();
+    renderSidebarExtras();
+</script>
+
+</body>
+</html>

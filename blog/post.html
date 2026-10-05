@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>Post - Il Blog dei Mario</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+    <style>
+        .author-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: #EEEEFF;
+            border-bottom: 2px ridge #9999CC;
+        }
+        .author-big-avatar { font-size: 38px; }
+        .author-card-info { font-size: 11px; }
+        .author-card-name { font-size: 18px; font-weight: bold; color: #0000CC; }
+        .comment-mine { background: #FFFDE7; border-color: #FFD700; }
+    </style>
+</head>
+<body>
+
+<div id="top-marquee">
+    <span>★ IL BLOG DEI MARIO ★ &nbsp;&nbsp;&nbsp; Oggi è: <span id="today-date"></span> &nbsp;&nbsp;&nbsp; ★ LEGGI, COMMENTA, CONDIVIDI! ★</span>
+</div>
+
+<div id="main-header">
+    <h1>✦ Il Blog dei Mario ✦</h1>
+    <div class="tagline">~ La community di tutti i Mario dal 2003 ~</div>
+</div>
+
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<table id="layout-table" cellpadding="0" cellspacing="4">
+<tr>
+
+    <td class="sidebar-left">
+        <div class="widget-box">
+            <div class="widget-title">👁 Visitatori</div>
+            <div class="widget-content" style="text-align:center; padding:6px 4px;">
+                <div style="font-size:10px; color:#666; margin-bottom:3px;">Visitatore n°</div>
+                <div id="visitor-counter">000000</div>
+                <div style="font-size:9px; color:#888; margin-top:3px;">dal 15 Marzo 2003</div>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📝 Post Recenti</div>
+            <div id="recent-posts" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📖 Guestbook</div>
+            <div id="sidebar-guestbook-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">💬 Amici MSN</div>
+            <div id="sidebar-msn" class="widget-content" style="font-size:10px;"></div>
+        </div>
+    </td>
+
+    <td class="content-center">
+
+        <!-- BREADCRUMB -->
+        <div id="breadcrumb" style="font-size:11px; color:#FFFF99; margin-bottom:4px; font-family:'Courier New',monospace;"></div>
+
+        <!-- POST -->
+        <div class="content-box" id="post-container">
+            <div style="padding:20px; text-align:center;">Caricamento... ⏳</div>
+        </div>
+
+        <!-- NAV PREV/NEXT -->
+        <div id="post-nav" style="margin:6px 0; font-size:11px; display:flex; justify-content:space-between;"></div>
+
+        <!-- COMMENTI -->
+        <div class="content-box" id="commenti">
+            <div class="content-box-title">💬 COMMENTI (<span id="comment-count">0</span>)</div>
+            <div id="comments-list" style="padding:8px;"></div>
+            <div style="background:#EEEEFF; border-top:2px ridge #9999CC; padding:8px;">
+                <div style="font-size:12px; font-weight:bold; color:#000080; margin-bottom:6px;">✏️ Lascia un commento</div>
+                <form onsubmit="submitComment(event)">
+                    <input type="text" id="comment-name" placeholder="Il tuo nome o nickname" maxlength="30"
+                        style="border:2px inset #AAA; width:98%; margin-bottom:4px; padding:3px 5px; font-family:'Comic Sans MS',cursive; font-size:11px; display:block;">
+                    <textarea id="comment-text" placeholder="Scrivi il tuo commento..."
+                        style="border:2px inset #AAA; width:98%; height:60px; margin-bottom:4px; padding:3px 5px; font-family:'Comic Sans MS',cursive; font-size:11px; display:block; resize:vertical;"></textarea>
+                    <button type="submit" class="button-3d">💬 Invia</button>
+                    <span style="font-size:10px; color:#888; margin-left:6px;">* niente spam!</span>
+                </form>
+                <div id="comment-success" style="display:none; color:#009900; font-weight:bold; font-size:12px; margin-top:6px;">
+                    ✅ Commento inviato! Grazie!!
+                </div>
+            </div>
+        </div>
+
+    </td>
+
+    <td class="sidebar-right">
+
+        <!-- AUTORE POST -->
+        <div class="widget-box" id="author-widget">
+            <div class="widget-title">✍️ L'Autore</div>
+            <div id="author-info" class="widget-content" style="font-size:10px; text-align:center;">...</div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">🔮 Oroscopo</div>
+            <div id="sidebar-oroscopo" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📊 Sondaggio</div>
+            <div id="sidebar-poll-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">💬 Amici MSN</div>
+            <div id="sidebar-msn-right" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+    </td>
+
+</tr>
+</table>
+
+<div id="main-footer">
+    <div>
+        <a href="index.html">🏠 Home</a> |
+        <a href="archivio.html">📰 Archivio</a> |
+        <a href="guestbook.html">📖 Guestbook</a> |
+        <a href="mario-list.html">👥 I Mario</a>
+    </div>
+    <div class="ie-disclaimer">★ Best viewed in IE 6.0 ★ | © 2003 Il Blog dei Mario</div>
+</div>
+
+<script>
+var currentPostId = null;
+
+function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+}
+
+function escapeHtml(text) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(text));
+    return d.innerHTML;
+}
+
+function renderPost() {
+    var id = getParam('id') || 1;
+    currentPostId = id;
+    var post = getPost(id);
+
+    if (!post) {
+        document.getElementById('post-container').innerHTML =
+            '<div style="padding:20px; color:red;">❌ Post non trovato! <a href="index.html">Torna alla home</a></div>';
+        return;
+    }
+
+    document.title = post.title + ' - Il Blog dei Mario';
+    incrementViews(id);
+
+    // Breadcrumb
+    document.getElementById('breadcrumb').innerHTML =
+        '<a href="index.html" style="color:#FFFF99;">Home</a> »' +
+        '<a href="archivio.html?categoria=' + encodeURIComponent(post.category) + '" style="color:#FFFF99;"> ' + post.category + '</a> »' +
+        '<span style="color:#FFF;"> ' + post.title.substring(0, 35) + '...</span>';
+
+    // Avatar autore
+    var authorUser = getUserByUsername(post.username);
+    var avatar = authorUser ? authorUser.avatar : '👤';
+
+    // Post content
+    document.getElementById('post-container').innerHTML =
+        '<div class="author-card">' +
+            '<span class="author-big-avatar">' + avatar + '</span>' +
+            '<div class="author-card-info">' +
+                '<div class="author-card-name">' +
+                    '<a href="profilo.html?username=' + (post.username||'') + '" style="color:#0000CC;">' + post.author + '</a>' +
+                '</div>' +
+                '<div>Categoria: <strong>' + post.category + '</strong> &nbsp; ' + post.stars + '</div>' +
+                '<div style="color:#666;">📅 ' + post.date + ' &nbsp; 👁 ' + post.views + ' visite</div>' +
+            '</div>' +
+        '</div>' +
+        '<div class="post-full-title">' + post.title + '</div>' +
+        '<div class="post-full-content">' + post.content +
+            '<hr class="separator-rainbow">' +
+            '<p style="font-size:11px; color:#666; text-align:center;">' +
+                'Tags: ' + (post.tags||[]).map(function(t) {
+                    return '<a href="archivio.html?tag=' + t + '" style="color:#0000CC;">#' + t + '</a>';
+                }).join(' ') +
+            '</p>' +
+        '</div>';
+
+    // Sidebar autore
+    if (authorUser) {
+        document.getElementById('author-info').innerHTML =
+            '<div style="font-size:40px;">' + authorUser.avatar + '</div>' +
+            '<strong>' + authorUser.name + '</strong><br>' +
+            '<a href="profilo.html?username=' + authorUser.username + '" style="font-size:10px;">@' + authorUser.username + '</a><br>' +
+            '<div style="font-size:10px; color:#555; margin:4px 0; line-height:1.4;">' + escapeHtml(authorUser.bio || '') + '</div>' +
+            '<div style="font-size:10px; color:#888;">Iscritto: ' + authorUser.joinDate + '</div>' +
+            '<div style="font-size:10px; margin-top:3px;"><strong>' + getPostsByUser(authorUser.username).length + '</strong> post scritti</div>';
+    }
+
+    // Nav post
+    var allPosts = getPosts();
+    var prevPost = allPosts[idx + 1];
+    var nextPost = allPosts[idx - 1];
+    var navHtml = '';
+    navHtml += prevPost
+        ? '<a class="nav-btn" href="post.html?id=' + prevPost.id + '">« ' + prevPost.title.substring(0,22) + '...</a>'
+        : '<a class="nav-btn" href="index.html">↩ Home</a>';
+    navHtml += '<a class="nav-btn" href="index.html">🏠 Home</a>';
+    navHtml += nextPost
+        ? '<a class="nav-btn" href="post.html?id=' + nextPost.id + '">' + nextPost.title.substring(0,22) + '... »</a>'
+        : '<span></span>';
+    document.getElementById('post-nav').innerHTML = navHtml;
+
+    // Post recenti sidebar
+    document.getElementById('recent-posts').innerHTML = allPosts.slice(0, 5).map(function(p) {
+        var av = getUserByUsername(p.username);
+        var emoji = av ? av.avatar : '👤';
+        var style = p.id == id ? 'font-weight:bold; color:#CC0000;' : '';
+        return '<a href="post.html?id=' + p.id + '" style="' + style + '">' + emoji + ' ' + p.title.substring(0,28) + '...</a>';
+    }).join('');
+
+    renderComments();
+}
+
+function renderComments() {
+    var post = getPost(currentPostId);
+    var comments = getComments(currentPostId);
+    document.getElementById('comment-count').textContent = comments.length;
+
+    // Pre-compila nome se loggato
+    var cu = getCurrentUser();
+    if (cu) {
+        document.getElementById('comment-name').value = cu.name;
+        document.getElementById('comment-name').disabled = true;
+    }
+
+    if (comments.length === 0) {
+        document.getElementById('comments-list').innerHTML =
+            '<div style="text-align:center; color:#888; font-size:11px; padding:10px;">Ancora nessun commento! Sii il primo! 👇</div>';
+        return;
+    }
+
+    var postAuthorName = post ? post.author : '';
+    document.getElementById('comments-list').innerHTML = comments.map(function(c) {
+        var isPostAuthor = c.author === postAuthorName;
+        var authorUser = c.username ? getUserByUsername(c.username) : null;
+        var avatar = authorUser ? authorUser.avatar : '💬';
+        var extraClass = isPostAuthor ? ' comment-mine' : '';
+        return '<div class="comment' + extraClass + '">' +
+            '<span class="comment-date">' + c.date + '</span>' +
+            '<div class="comment-author">' + avatar + ' ' + escapeHtml(c.author) +
+                (isPostAuthor ? ' <span style="font-size:9px; background:#FFD700; color:#000; padding:1px 4px; border:1px solid #CC9900;">✍️ autore</span>' : '') +
+            '</div>' +
+            '<div class="comment-text">' + escapeHtml(c.content) + '</div>' +
+        '</div>';
+    }).join('');
+}
+
+function submitComment(e) {
+    e.preventDefault();
+    var name = document.getElementById('comment-name').value.trim();
+    var text = document.getElementById('comment-text').value.trim();
+    if (!name) { alert('Inserisci il tuo nome!'); return false; }
+    if (text.length < 3) { alert('Scrivi qualcosa di più!'); return false; }
+
+    addComment(currentPostId, name, text);
+    document.getElementById('comment-text').value = '';
+    var ok = document.getElementById('comment-success');
+    ok.style.display = 'block';
+    setTimeout(function() { ok.style.display = 'none'; }, 4000);
+    renderComments();
+    return false;
+}
+
+</script>
+
+</body>
+</html>

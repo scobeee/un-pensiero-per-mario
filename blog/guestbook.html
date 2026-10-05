@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>Guestbook - Il Blog di Mario</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+</head>
+<body>
+
+<div id="top-marquee">
+    <span>
+        ★ BENVENUTO NEL MIO BLOG ★ &nbsp;&nbsp;&nbsp;
+        Oggi è: <span id="today-date"></span> &nbsp;&nbsp;&nbsp;
+        ★ FIRMA IL MIO GUESTBOOK!! ★ &nbsp;&nbsp;&nbsp;
+        Lascia un messaggio per Mario! &nbsp;&nbsp;&nbsp;
+    </span>
+</div>
+
+<div id="main-header">
+    <h1>✦ Il Blog di Mario ✦</h1>
+    <div class="tagline">~ La mia finestra sul mondo digitale dal 2003 ~</div>
+</div>
+
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<table id="layout-table" cellpadding="0" cellspacing="4">
+<tr>
+    <td class="sidebar-left">
+        <div class="widget-box">
+            <div class="widget-title">👁 Visitatori</div>
+            <div class="widget-content" style="text-align:center; padding:6px 4px;">
+                <div style="font-size:10px; color:#666; margin-bottom:3px;">Sei il visitatore n°</div>
+                <div id="visitor-counter">000000</div>
+                <div style="font-size:9px; color:#888; margin-top:3px;">dal 15 Marzo 2003</div>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📊 Statistiche</div>
+            <div class="widget-content" style="font-size:10px;" id="gb-stats">
+                Caricamento...
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">⭐ Oroscopo</div>
+            <div id="sidebar-oroscopo" class="widget-content" style="font-size:10px;"></div>
+        </div>
+    </td>
+
+    <td class="content-center">
+        <div class="content-box">
+            <div class="content-box-title">📖 GUESTBOOK - Lascia il tuo segno!</div>
+
+            <!-- FORM FIRMA -->
+            <div style="padding:10px; background-color:#FFFFCC; border-bottom:2px ridge #999900;">
+                <div style="font-size:13px; font-weight:bold; color:#000080; margin-bottom:8px;">
+                    ✍️ Firma il Guestbook di Mario!
+                </div>
+                <form onsubmit="submitGuestbook(event)">
+                    <table cellpadding="3" style="width:100%; font-size:11px;">
+                    <tr>
+                        <td style="width:80px;"><strong>Nome/Nick:</strong></td>
+                        <td><input type="text" id="gb-name" maxlength="30" placeholder="Il tuo nick"
+                            style="border:2px inset #AAAAAA; width:95%; padding:2px 4px; font-family:'Comic Sans MS',cursive; font-size:11px;"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Messaggio:</strong></td>
+                        <td><textarea id="gb-message" maxlength="300" placeholder="Scrivi un messaggio per Mario! (max 300 caratteri)"
+                            style="border:2px inset #AAAAAA; width:95%; height:70px; padding:2px 4px; font-family:'Comic Sans MS',cursive; font-size:11px; resize:vertical;"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="submit" class="button-3d">📨 Invia messaggio!</button>
+                            &nbsp;
+                            <button type="button" class="button-3d" onclick="document.getElementById('gb-name').value=''; document.getElementById('gb-message').value='';">🗑 Cancella</button>
+                        </td>
+                    </tr>
+                    </table>
+                </form>
+                <div id="gb-success" style="display:none; color:#009900; font-weight:bold; font-size:13px; margin-top:6px; padding:6px; background:#CCFFCC; border:1px solid #009900;">
+                    ✅ Messaggio inviato! Grazie per aver firmato il mio guestbook!! 😊
+                </div>
+            </div>
+
+            <!-- LISTA MESSAGGI -->
+            <div id="guestbook-list" style="padding:8px;">
+                <div style="text-align:center; color:#888; font-size:11px; padding:10px;">Caricamento...</div>
+            </div>
+        </div>
+    </td>
+
+    <td class="sidebar-right">
+        <div class="widget-box">
+            <div class="widget-title">👤 Su di Me</div>
+            <div class="widget-content" style="text-align:center;">
+                <div style="font-size:40px; margin:4px 0;">😎</div>
+                <strong>Maria Giuliacci</strong><br>
+                <div style="font-size:10px; color:#555; margin-top:3px;">
+                    17 anni, Milano<br>
+                    💻 PC &amp; Internet<br>
+                    🎵 Rock &amp; Metal
+                </div>
+                <hr class="separator-rainbow" style="margin:5px 0;">
+                <div style="font-size:10px;">
+                    MSN: <span style="font-family:monospace;">mario@hotmail.it</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📜 Regole</div>
+            <div class="widget-content" style="font-size:10px; line-height:1.6;">
+                1. Sii rispettoso!<br>
+                2. No spam o link<br>
+                3. No parolacce<br>
+                4. Max 300 caratteri<br>
+                5. Divertiti! 😊
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">🔗 Link Rapidi</div>
+            <div class="widget-content" style="font-size:10px;">
+                <a href="index.html">🏠 Home</a>
+                <a href="archivio.html">📰 Archivio</a>
+                <a href="sudime.html">👤 Su di Me</a>
+                <a href="contatti.html">📧 Contatti</a>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📊 Sondaggio</div>
+            <div id="sidebar-poll-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+    </td>
+</tr>
+</table>
+
+<div id="main-footer">
+    <div>✉️ <a href="mailto:mario@hotmail.it">mario@hotmail.it</a> &nbsp;|&nbsp; ICQ: <strong>12345678</strong></div>
+    <div style="margin-top:4px;">
+        <a href="index.html">Home</a> | <a href="guestbook.html">Guestbook</a> |
+        <a href="sudime.html">Su di Me</a> | <a href="contatti.html">Contatti</a> |
+        <a href="archivio.html">Archivio</a>
+    </div>
+    <div class="ie-disclaimer">★ Best viewed in IE 6.0 ★ | © 2003 Il Blog di Mario</div>
+</div>
+
+<script>
+function renderGuestbook() {
+    var messages = getGuestmessages();
+
+    // Statistiche
+    document.getElementById('gb-stats').innerHTML =
+        '<strong>' + messages.length + '</strong> messaggi totali<br>' +
+        '<span style="color:#0000CC;">Firma anche tu!</span>';
+
+    if (messages.length === 0) {
+        document.getElementById('guestbook-list').innerHTML =
+            '<div style="text-align:center; padding:20px; font-size:13px; color:#666;">' +
+            '😔 Ancora nessun messaggio...<br>Sii il primo a firmare!!</div>';
+        return;
+    }
+
+    var html = '';
+    messages.forEach((m, i) => {
+        var bgColor = i % 2 === 0 ? '#F5F5FF' : '#FFFFF0';
+        html += `
+            <div style="border:2px groove #9999CC; padding:8px; margin-bottom:6px; background-color:${bgColor}; font-size:11px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span style="font-weight:bold; color:#CC0000; font-size:13px;">🌟 ${escapeHtml(m.author)}</span>
+                    <span style="font-size:10px; color:#888; font-family:monospace;">${m.date}</span>
+                </div>
+                <div style="line-height:1.6; padding-left:4px;">"${escapeHtml(m.content)}"</div>
+            </div>
+        `;
+    });
+
+    document.getElementById('guestbook-list').innerHTML = html;
+}
+
+function escapeHtml(text) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(text));
+    return d.innerHTML;
+}
+
+function submitGuestbook(e) {
+    e.preventDefault();
+    var name = document.getElementById('gb-name').value.trim();
+    var msg  = document.getElementById('gb-message').value.trim();
+
+    if (!name) { alert('Inserisci il tuo nome o nickname!'); return false; }
+    if (name.length < 2) { alert('Nome troppo corto!'); return false; }
+    if (!msg) { alert('Scrivi un messaggio!'); return false; }
+    if (msg.length < 5) { alert('Messaggio troppo corto!'); return false; }
+
+    addGuestmessage(name, msg);
+
+    document.getElementById('gb-name').value = '';
+    document.getElementById('gb-message').value = '';
+
+    var ok = document.getElementById('gb-success');
+    ok.style.display = 'block';
+    setTimeout(() => { ok.style.display = 'none'; }, 5000);
+
+    renderGuestbook();
+    renderNavbar();
+    return false;
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderGuestbook();
+        renderNavbar();
+    });
+</script>
+
+</body>
+</html>

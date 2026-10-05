@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>Archivio - Il Blog di Mario</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+</head>
+<body>
+
+<div id="top-marquee">
+    <span>
+        ★ ARCHIVIO COMPLETO DEL BLOG ★ &nbsp;&nbsp;&nbsp;
+        Oggi è: <span id="today-date"></span> &nbsp;&nbsp;&nbsp;
+        ★ TUTTI I POST DI MARIO ★ &nbsp;&nbsp;&nbsp;
+        Filtra per categoria! &nbsp;&nbsp;&nbsp;
+    </span>
+</div>
+
+<div id="main-header">
+    <h1>✦ Il Blog di Mario ✦</h1>
+    <div class="tagline">~ La mia finestra sul mondo digitale dal 2003 ~</div>
+</div>
+
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<table id="layout-table" cellpadding="0" cellspacing="4">
+<tr>
+    <td class="sidebar-left">
+        <!-- VISITOR COUNTER -->
+        <div class="widget-box">
+            <div class="widget-title">👁 Visitatori</div>
+            <div class="widget-content" style="text-align:center; padding:6px 4px;">
+                <div style="font-size:10px; color:#666; margin-bottom:3px;">Visitatore n°</div>
+                <div id="visitor-counter">000000</div>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📂 Categorie</div>
+            <div id="categories-list" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">🏷️ Tag Cloud</div>
+            <div id="tag-cloud" class="widget-content" style="font-size:10px; line-height:2;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">🔮 Oroscopo</div>
+            <div id="sidebar-oroscopo" class="widget-content" style="font-size:10px;"></div>
+        </div>
+    </td>
+
+    <td class="content-center">
+        <div class="content-box">
+            <div class="content-box-title" id="archive-title">🗃️ ARCHIVIO COMPLETO</div>
+
+            <!-- FILTRI -->
+            <div style="padding:6px 8px; background-color:#EEEEFF; border-bottom:1px solid #CCCCFF; font-size:11px;">
+                <strong>Filtra:</strong>
+                <button class="button-3d" style="font-size:10px; padding:2px 6px; margin-left:4px;" onclick="filterPosts('all')">Tutti</button>
+                <span id="cat-filter-buttons"></span>
+            </div>
+
+            <div id="archive-list" style="padding:8px;">
+                Caricamento...
+            </div>
+        </div>
+    </td>
+
+    <td class="sidebar-right">
+        <div class="widget-box">
+            <div class="widget-title">📊 Statistiche</div>
+            <div id="blog-stats" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">🔥 Post Più Visti</div>
+            <div id="top-posts" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📊 Sondaggio</div>
+            <div id="sidebar-poll-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+    </td>
+</tr>
+</table>
+
+<div id="main-footer">
+    <div>
+        <a href="index.html">🏠 Home</a> |
+        <a href="archivio.html">📰 Archivio</a> |
+        <a href="guestbook.html">📖 Guestbook</a> |
+        <a href="mario-list.html">👥 I Mario</a>
+    </div>
+    <div class="ie-disclaimer">★ Best viewed in IE 6.0 ★ | © 2003 Il Blog dei Mario</div>
+</div>
+
+<script>
+var currentFilter = 'all';
+
+var archiveCategoryColors = {
+    'Tecnologia': '#0000AA',
+    'Vita Mia': '#009900',
+    'Cinema & TV': '#990099',
+    'Sport': '#AA0000',
+    'Pensieri': '#996600',
+    'Musica': '#006699'
+};
+
+function getCatColor(cat) {
+    return archiveCategoryColors[cat] || '#444444';
+}
+
+function getCatEmoji(cat) {
+    var map = { 'Tecnologia':'💻', 'Vita Mia':'🌟', 'Cinema & TV':'🎬', 'Sport':'⚽', 'Pensieri':'💭', 'Musica':'🎵' };
+    return map[cat] || '📝';
+}
+
+function getAuthorAvatar(username) {
+    var user = getUserByUsername(username);
+    return user ? user.avatar : '👤';
+}
+
+function renderArchive(filter) {
+    currentFilter = filter || 'all';
+    var posts = getPosts();
+
+    // Controlla se filtro da URL
+    var params = new URLSearchParams(window.location.search);
+    var urlCat = params.get('categoria');
+    var urlTag = params.get('tag');
+    if (!filter && urlCat) { currentFilter = 'cat:' + urlCat; }
+    if (!filter && urlTag) { currentFilter = 'tag:' + urlTag; }
+
+    var filtered = posts;
+    var titleExtra = '';
+
+    if (currentFilter !== 'all') {
+        if (currentFilter.startsWith('cat:')) {
+            var cat = currentFilter.replace('cat:', '');
+            filtered = posts.filter(function(p) { return p.category === cat; });
+            titleExtra = ' — Categoria: ' + cat;
+        } else if (currentFilter.startsWith('tag:')) {
+            var tag = currentFilter.replace('tag:', '');
+            filtered = posts.filter(function(p) { return p.tags && p.tags.includes(tag); });
+            titleExtra = ' — Tag: #' + tag;
+        }
+    }
+
+    document.getElementById('archive-title').textContent = '🗃️ ARCHIVIO' + titleExtra;
+
+    // Filtri
+    var cats = [...new Set(posts.map(function(p){ return p.category; }))];
+    document.getElementById('cat-filter-buttons').innerHTML = cats.map(function(c) {
+        return '<button class="button-3d" style="font-size:10px; padding:2px 6px; margin:1px;" onclick="filterPosts(\'cat:' + c + '\')">' + c + '</button>';
+    }).join('');
+
+    // Categorie sidebar
+    document.getElementById('categories-list').innerHTML = cats.map(function(c) {
+        var cnt = posts.filter(function(p) { return p.category === c; }).length;
+        return '<a href="#" onclick="filterPosts(\'cat:' + c + '\'); return false;">📁 ' + c + ' (' + cnt + ')</a>';
+    }).join('');
+
+    // Tag cloud
+    var tagCounts = {};
+    posts.forEach(function(p) {
+        (p.tags || []).forEach(function(tag) {
+            tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+        });
+    });
+    document.getElementById('tag-cloud').innerHTML = Object.entries(tagCounts).map(function(item) {
+        var t = item[0], n = item[1];
+        return '<a href="#" onclick="filterPosts(\'tag:'+t+'\'); return false;" style="font-size:'+(9+n*2)+'px; margin:1px; display:inline-block;">#'+t+'</a>';
+    }).join(' ');
+
+    // Stats
+    var totalComments = posts.reduce(function(sum, p) { return sum + getCommentCount(p.id); }, 0);
+    var totalViews = posts.reduce(function(sum, p) { return sum + p.views; }, 0);
+    document.getElementById('blog-stats').innerHTML =
+        '<strong>' + posts.length + '</strong> post totali<br>' +
+        '<strong>' + totalComments + '</strong> commenti<br>' +
+        '<strong>' + totalViews + '</strong> visite totali<br>' +
+        '<strong>' + cats.length + '</strong> categorie';
+
+    // Top
+    var topP = [...posts].sort(function(a,b) { return b.views - a.views; }).slice(0, 3);
+    document.getElementById('top-posts').innerHTML = topP.map(function(p) {
+        return '<a href="post.html?id='+p.id+'" style="display:block; margin-bottom:3px;">🔥 '+p.title.substring(0,25)+'... <span style="color:#888;">(👁 '+p.views+')</span></a>';
+    }).join('');
+
+    // Lista post (ALLINEATA A INDEX)
+    var container = document.getElementById('archive-list');
+    console.log("Rendering archive, posts count:", filtered.length);
+
+    if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">Nessun post trovato per questo filtro.</div>';
+        return;
+    }
+
+    container.innerHTML = filtered.map(function(p) {
+        var commentCount = getCommentCount(p.id);
+        var avatar = getAuthorAvatar(p.username);
+        var catColor = getCatColor(p.category);
+
+        return '<div class="post-preview">' +
+            '<div class="post-date">📅 ' + p.date + '</div>' +
+            '<div class="post-title"><a href="post.html?id=' + p.id + '">' + p.title + '</a></div>' +
+            '<div class="post-author-bar">' +
+                '<span class="post-author-avatar">' + avatar + '</span>' +
+                '<a class="author-chip" href="profilo.html?username=' + (p.username || '') + '">' + p.author + '</a>' +
+                '<span style="display:inline-block; background:' + catColor + '; color:#FFF; font-size:10px; padding:1px 7px; font-weight:bold;">' +
+                    getCatEmoji(p.category) + ' ' + p.category +
+                '</span>' +
+                '<span class="hit-stars" style="font-size:11px;">' + p.stars + '</span>' +
+            '</div>' +
+            '<div class="post-excerpt">' + p.excerpt.substring(0, 150) + '...</div>' +
+            '<div class="post-meta">' +
+                '<span>💬 <a href="post.html?id=' + p.id + '#commenti">' + commentCount + ' commenti</a></span>' +
+                ' &nbsp; <span>👁 ' + p.views + ' visite</span>' +
+            '</div>' +
+            '<a class="read-more" href="post.html?id=' + p.id + '">Leggi tutto »</a>' +
+        '</div>';
+    }).join('');
+}
+
+function filterPosts(filter) {
+    renderArchive(filter);
+    window.scrollTo(0, 200);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initSidebarWidgets();
+    renderNavbar();
+    renderArchive();
+});
+</script>
+
+</body>
+</html>

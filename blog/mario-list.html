@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>I Mario del Blog — Il Blog dei Mario</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+    <style>
+        .mario-profile-card {
+            border: 3px ridge #9900CC;
+            background: linear-gradient(180deg, #FFFFEE, #FFFFFF);
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .mario-big-avatar {
+            font-size: 56px;
+            line-height: 1;
+            flex-shrink: 0;
+            text-align: center;
+            width: 70px;
+        }
+        .mario-info { flex: 1; }
+        .mario-info h2 { font-size: 18px; color: #0000CC; text-decoration: underline; margin-bottom: 2px; }
+        .mario-info .at { font-size: 11px; color: #888; font-family: monospace; }
+        .mario-info .bio { font-size: 12px; color: #333; margin: 5px 0; line-height: 1.5; }
+        .mario-stats { display: flex; gap: 12px; font-size: 11px; color: #666; margin-top: 5px; }
+        .mario-stats span { background: #EEEEFF; border: 1px solid #CCCCFF; padding: 1px 6px; }
+        .mario-post-link { font-size: 11px; color: #0000CC; display: block; margin-top: 2px; }
+        .mario-post-link:hover { color: #FF0000; }
+    </style>
+</head>
+<body>
+
+<div id="top-marquee">
+    <span>★ I MARIO DEL BLOG ★ &nbsp;&nbsp;&nbsp; Oggi è: <span id="today-date"></span> &nbsp;&nbsp;&nbsp; ★ SCOPRI CHI SCRIVE SUL BLOG ★ &nbsp;&nbsp;&nbsp; Sei un Mario? Unisciti a noi! ★</span>
+</div>
+
+<div id="main-header">
+    <h1>✦ Il Blog dei Mario ✦</h1>
+    <div class="tagline">~ La community di tutti i Mario dal 2003 ~</div>
+</div>
+
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<table id="layout-table" cellpadding="0" cellspacing="4">
+<tr>
+    <td class="sidebar-left">
+        <div class="widget-box">
+            <div class="widget-title">👁 Visitatori</div>
+            <div class="widget-content" style="text-align:center; padding:6px 4px;">
+                <div style="font-size:10px; color:#666; margin-bottom:3px;">Visitatore n°</div>
+                <div id="visitor-counter">000000</div>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📊 Statistiche</div>
+            <div id="community-stats" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">🔮 Oroscopo</div>
+            <div id="sidebar-oroscopo" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📊 Sondaggio</div>
+            <div id="sidebar-poll-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+    </td>
+
+    <td class="content-center">
+        <div class="content-box">
+            <div class="content-box-title">👥 TUTTI I MARIO DELLA COMMUNITY</div>
+            <div id="mario-list-container" style="padding:10px;">
+                Caricamento...
+            </div>
+        </div>
+
+        <!-- INVITO REGISTRAZIONE -->
+        <div class="content-box" style="margin-top:8px;">
+            <div class="content-box-title">🍄 SEI UN MARIO? UNISCITI A NOI!</div>
+            <div style="padding:12px; text-align:center; font-size:13px;">
+                <div style="font-size:40px; margin-bottom:8px;">🍄⭐🎉</div>
+                <p style="margin-bottom:8px;">
+                    Il Blog dei Mario è la community esclusiva per tutti coloro che si chiamano Mario.<br>
+                    <strong>Registrati gratis</strong> e inizia a condividere le tue storie con il mondo!
+                </p>
+                <a href="register.html">
+                    <button class="button-3d" style="font-size:14px; padding:6px 20px;">📝 REGISTRATI GRATIS!</button>
+                </a>
+                &nbsp;
+                <a href="login.html">
+                    <button class="button-3d" style="font-size:14px; padding:6px 20px;">🔐 Hai già un account?</button>
+                </a>
+            </div>
+        </div>
+    </td>
+
+    <td class="sidebar-right">
+        <div class="widget-box">
+            <div class="widget-title">🏆 Mario + Attivo</div>
+            <div id="top-mario" class="widget-content" style="font-size:10px; text-align:center;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📖 Guestbook</div>
+            <div id="sidebar-guestbook-content" class="widget-content" style="font-size:10px;"></div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">💬 Amici su MSN</div>
+            <div id="sidebar-msn" class="widget-content" style="font-size:10px;"></div>
+        </div>
+    </td>
+</tr>
+</table>
+
+<div id="main-footer">
+    <div>
+        <a href="index.html">🏠 Home</a> |
+        <a href="archivio.html">📰 Archivio</a> |
+        <a href="guestbook.html">📖 Guestbook</a> |
+        <a href="register.html">📝 Registrati</a>
+    </div>
+    <div class="ie-disclaimer">★ Best viewed in IE 6.0 ★ | © 2003 Il Blog dei Mario</div>
+</div>
+
+<script>
+    var users = getUsers();
+    var allPosts = getPosts();
+
+    // Statistiche community
+    var totalComments = allPosts.reduce(function(s,p){ return s + getCommentCount(p.id); }, 0);
+    document.getElementById('community-stats').innerHTML =
+        '<strong>' + users.length + '</strong> Mario iscritti<br>' +
+        '<strong>' + allPosts.length + '</strong> post pubblicati<br>' +
+        '<strong>' + totalComments + '</strong> commenti<br>' +
+        '<strong>' + localStorage.getItem('blog_visits') + '</strong> visite totali';
+
+    // Top Mario
+    var topUser = users.map(function(u) {
+        return { u: u, count: getPostsByUser(u.username).length };
+    }).sort(function(a,b){ return b.count - a.count; })[0];
+
+    if (topUser) {
+        document.getElementById('top-mario').innerHTML =
+            '<div style="font-size:40px;">' + topUser.u.avatar + '</div>' +
+            '<strong>' + topUser.u.name + '</strong><br>' +
+            '<a href="profilo.html?username=' + topUser.u.username + '">@' + topUser.u.username + '</a><br>' +
+            '<span style="color:#FF6600;">' + topUser.count + ' post scritti!</span>';
+    }
+
+    // Lista Mario
+    var html = '';
+    users.forEach(function(u) {
+        var userPosts = getPostsByUser(u.username);
+        var totalViews = userPosts.reduce(function(s,p){ return s + p.views; }, 0);
+
+        html += '<div class="mario-profile-card">' +
+            '<div class="mario-big-avatar">' + u.avatar + '</div>' +
+            '<div class="mario-info">' +
+                '<h2><a href="profilo.html?username=' + u.username + '">' + u.name + '</a></h2>' +
+                '<div class="at">@' + u.username + ' — iscritto dal ' + u.joinDate + '</div>' +
+                '<div class="bio">' + escapeHtml(u.bio || 'Nessuna bio disponibile.') + '</div>' +
+                '<div class="mario-stats">' +
+                    '<span>✏️ ' + userPosts.length + ' post</span>' +
+                    '<span>👁 ' + totalViews + ' visite</span>' +
+                    '<span>💬 ' + userPosts.reduce(function(s,p){ return s + getCommentCount(p.id); }, 0) + ' commenti</span>' +
+                '</div>' +
+                (userPosts.length > 0 ?
+                    '<div style="margin-top:6px; font-size:11px;"><strong>Ultimi post:</strong>' +
+                    userPosts.slice(0, 3).map(function(p) {
+                        return '<a class="mario-post-link" href="post.html?id=' + p.id + '">» ' + p.title + '</a>';
+                    }).join('') +
+                    '</div>' : '<div style="font-size:11px; color:#888; margin-top:5px;">Ancora nessun post.</div>') +
+            '</div>' +
+        '</div>';
+    });
+
+    document.getElementById('mario-list-container').innerHTML = html;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initSidebarWidgets();
+    renderNavbar();
+});
+
+function escapeHtml(text) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(text));
+    return d.innerHTML;
+}
+</script>
+</body>
+</html>

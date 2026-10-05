@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>Login - Il Blog dei Mario</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+</head>
+<body>
+
+<div id="top-marquee">
+    <span>★ LOGIN AL BLOG ★ Benvenuto di nuovo Mario! ★ Inserisci le tue credenziali ★</span>
+</div>
+
+<div id="main-header">
+    <h1>✦ Il Blog dei Mario ✦</h1>
+    <div class="tagline">~ La casa digitale di tutti i Mario dal 2003 ~</div>
+</div>
+
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<div style="width:800px; margin:40px auto; text-align:center;">
+
+    <div class="content-box" style="display:inline-block; width:350px; text-align:left;">
+        <div class="content-box-title">🔐 Login</div>
+
+        <div style="padding:15px; font-size:12px;">
+            <form onsubmit="doLoginAuth(event)">
+                <table cellpadding="5" style="width:100%; font-size:12px;">
+                    <tr>
+                        <td style="width:80px; font-weight:bold;">Username:</td>
+                        <td><input type="text" id="login-username" placeholder="Il tuo username"
+                            style="border:2px inset #AAAAAA; padding:3px; width:100%; font-family:'Comic Sans MS',cursive;"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Password:</td>
+                        <td><input type="password" id="login-password" placeholder="La tua password"
+                            style="border:2px inset #AAAAAA; padding:3px; width:100%; font-family:'Comic Sans MS',cursive;"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="padding-top:10px;">
+                            <button type="submit" class="button-3d" style="font-size:14px; padding:5px 15px;">🔑 Accedi</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+            <div id="login-error" style="display:none; color:red; font-weight:bold; margin-top:10px; padding:5px; border:1px dashed red; background:#FFEEEE;"></div>
+
+            <div style="margin-top:15px; font-size:11px; text-align:center; border-top:1px solid #CCC; padding-top:10px;">
+                Non hai ancora un account? <a href="register.html" style="color:#0000CC; font-weight:bold;">Registrati qui!</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="main-footer">
+    <div class="ie-disclaimer">★ Best viewed in IE 6.0 ★ | © 2003 Il Blog dei Mario</div>
+</div>
+
+<script>
+function doLoginAuth(e) {
+    e.preventDefault();
+    var user = document.getElementById('login-username').value.trim();
+    var pass = document.getElementById('login-password').value;
+
+    var res = loginUser(user, pass);
+
+    if (!res.ok) {
+        var errBox = document.getElementById('login-error');
+        errBox.textContent = "❌ " + res.error;
+        errBox.style.display = "block";
+    } else {
+        alert("Benvenuto di nuovo, " + res.user.name + "!! 🚀");
+        window.location.href = "index.html";
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=800">
+    <title>Scrivi un Post - Il Blog dei Mario</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="blog.js"></script>
+    <style>
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+        .admin-nav-btn {
+            display: block;
+            padding: 5px 8px;
+            margin-bottom: 3px;
+            background: #C0C0C0;
+            border: 2px outset #FFF;
+            color: #000080;
+            font-family: "Comic Sans MS", cursive;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: left;
+        }
+        .admin-nav-btn:hover, .admin-nav-btn.active { background: #DFDFDF; border-style: inset; }
+        .admin-nav-btn.danger { color: #CC0000; }
+        .data-row { border: 1px solid #CCCCFF; padding: 6px; margin-bottom: 4px; background: #FAFAFA; font-size: 11px; }
+        .data-row:hover { background: #EEEEFF; }
+    </style>
+</head>
+<body>
+
+<div id="top-marquee">
+    <span>★ PANNELLO AUTORE ★ &nbsp;&nbsp;&nbsp; Oggi è: <span id="today-date"></span> &nbsp;&nbsp;&nbsp; ★ IL BLOG DEI MARIO ★ Scrivi il tuo post! ★</span>
+</div>
+
+<div id="main-header">
+    <h1>✦ Il Blog dei Mario — Area Autori ✦</h1>
+    <div class="tagline">~ Scrivi, gestisci, pubblica! ~</div>
+</div>
+
+<div id="navbar"><div id="navbar-container"></div></div>
+
+<!-- NOT LOGGED IN: mostra avviso -->
+<div id="not-logged-section" style="display:none; width:800px; margin:30px auto; text-align:center;">
+    <div class="content-box" style="display:inline-block; padding:20px; min-width:350px;">
+        <div class="content-box-title">🔐 ACCESSO RISERVATO</div>
+        <div style="padding:20px; font-size:13px;">
+            <div style="font-size:40px; margin-bottom:10px;">🔒</div>
+            <p style="margin-bottom:12px;">Per scrivere sul blog devi essere loggato.<br>
+            Solo i <strong>Mario</strong> possono farlo!</p>
+            <a href="login.html">
+                <button class="button-3d" style="font-size:14px; padding:6px 18px; margin:3px;">🔐 Login</button>
+            </a>
+            <a href="register.html">
+                <button class="button-3d" style="font-size:14px; padding:6px 18px; margin:3px;">📝 Registrati</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- LOGGED IN: pannello autore -->
+<div id="logged-section" style="display:none;">
+<table id="layout-table" cellpadding="0" cellspacing="4">
+<tr>
+
+    <td class="sidebar-left">
+        <div class="widget-box">
+            <div class="widget-title">👤 Loggato come</div>
+            <div class="widget-content" style="text-align:center; font-size:11px;">
+                <div id="admin-avatar" style="font-size:40px; margin:4px 0;"></div>
+                <strong id="admin-name"></strong><br>
+                <span id="admin-username" style="color:#888; font-family:monospace;"></span>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">⚙️ Menu</div>
+            <div class="widget-content" style="padding:4px;">
+                <a class="admin-nav-btn active" id="btn-nuovo" onclick="showSection('nuovo-post')">➕ Nuovo Post</a>
+                <a class="admin-nav-btn" id="btn-miei" onclick="showSection('miei-post')">📝 I Miei Post</a>
+                <a class="admin-nav-btn" id="btn-commenti" onclick="showSection('commenti')">💬 Commenti</a>
+                <a class="admin-nav-btn" id="btn-statistiche" onclick="showSection('statistiche')">📊 Statistiche</a>
+                <a class="admin-nav-btn" id="btn-guestbook" onclick="showSection('guestbook-admin')">📖 Guestbook</a>
+                <hr style="margin:4px 0;">
+                <a class="admin-nav-btn" href="index.html">🏠 Torna al Blog</a>
+                <a class="admin-nav-btn danger" onclick="doLogout()">🚪 Logout</a>
+            </div>
+        </div>
+
+        <div class="widget-box">
+            <div class="widget-title">📊 Le tue stats</div>
+            <div class="widget-content" style="font-size:10px;" id="my-stats"></div>
+        </div>
+    </td>
+
+    <td class="content-center">
+
+        <!-- SEZIONE: NUOVO POST -->
+        <div id="section-nuovo-post" class="content-box admin-section active">
+            <div class="content-box-title">➕ SCRIVI UN NUOVO POST</div>
+            <div style="padding:12px;">
+                <form onsubmit="handleSavePost(event)">
+                <table cellpadding="5" style="width:100%; font-size:12px;">
+                <tr>
+                    <td style="width:100px; font-weight:bold;">Titolo:*</td>
+                    <td><input type="text" id="np-title" maxlength="150" placeholder="Titolo del tuo post..."
+                        style="border:2px inset #AAA; width:98%; padding:3px; font-family:'Comic Sans MS',cursive; font-size:12px;"></td>
+                </tr>
+                <tr>
+                    <td><strong>Categoria:*</strong></td>
+                    <td>
+                        <select id="np-category" style="border:2px inset #AAA; padding:3px; font-family:'Comic Sans MS',cursive; font-size:12px;">
+                            <option>Tecnologia</option>
+                            <option>Vita Mia</option>
+                            <option>Cinema &amp; TV</option>
+                            <option>Sport</option>
+                            <option>Pensieri</option>
+                            <option>Musica</option>
+                            <option>Scuola</option>
+                            <option>Amici</option>
+                            <option>Altro</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Stelle:</strong></td>
+                    <td>
+                        <select id="np-stars" style="border:2px inset #AAA; padding:3px; font-family:'Comic Sans MS',cursive; font-size:12px;">
+                            <option value="★★★★★">★★★★★</option>
+                            <option value="★★★★☆">★★★★☆</option>
+                            <option value="★★★☆☆" selected>★★★☆☆</option>
+                            <option value="★★☆☆☆">★★☆☆☆</option>
+                            <option value="★☆☆☆☆">★☆☆☆☆</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Tag:</strong></td>
+                    <td><input type="text" id="np-tags" placeholder="tag1, tag2, tag3"
+                        style="border:2px inset #AAA; width:98%; padding:3px; font-family:'Comic Sans MS',cursive; font-size:12px;"></td>
+                </tr>
+                <tr>
+                    <td><strong>Estratto:*</strong></td>
+                    <td><textarea id="np-excerpt" rows="3" maxlength="400" placeholder="Breve descrizione..."
+                        style="border:2px inset #AAA; width:98%; padding:3px; font-family:'Comic Sans MS',cursive; font-size:12px; resize:vertical;"></textarea></td>
+                </tr>
+                <tr>
+                    <td><strong>Testo:*</strong></td>
+                    <td><textarea id="np-content" rows="14" placeholder="Testo completo..."
+                        style="border:2px inset #AAA; width:98%; padding:3px; font-family:'Courier New',monospace; font-size:11px; resize:vertical;"></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="padding-top:8px;">
+                        <button type="submit" class="button-3d" style="font-size:13px; padding:5px 18px;">💾 Pubblica Post!</button>
+                    </td>
+                </tr>
+                </table>
+                </form>
+                <div id="post-success" style="display:none; color:#006600; font-weight:bold; font-size:13px; margin-top:10px; padding:10px; background:#CCFFCC; border:2px solid #009900; text-align:center;">
+                    ✅ Post pubblicato! <a href="index.html">Vai al blog →</a>
+                </div>
+                <div id="post-error" style="display:none; color:#CC0000; font-weight:bold; font-size:12px; margin-top:8px; padding:6px; background:#FFEEEE; border:1px dashed red;"></div>
+            </div>
+        </div>
+
+        <!-- SEZIONE: I MIEI POST -->
+        <div id="section-miei-post" class="content-box admin-section">
+            <div class="content-box-title">📝 I MIEI POST</div>
+            <div id="miei-post-list" style="padding:8px;"></div>
+        </div>
+
+        <!-- SEZIONE: COMMENTI -->
+        <div id="section-commenti" class="content-box admin-section">
+            <div class="content-box-title">💬 COMMENTI AI MIEI POST</div>
+            <div id="commenti-admin-list" style="padding:8px;"></div>
+        </div>
+
+        <!-- SEZIONE: STATISTICHE -->
+        <div id="section-statistiche" class="content-box admin-section">
+            <div class="content-box-title">📊 LE MIE STATISTICHE</div>
+            <div id="stats-content" style="padding:12px; font-size:12px;"></div>
+        </div>
+
+        <!-- SEZIONE: GUESTBOOK -->
+        <div id="section-guestbook-admin" class="content-box admin-section">
+            <div class="content-box-title">📖 GESTISCI GUESTBOOK</div>
+            <div id="guestbook-admin-list" style="padding:8px;"></div>
+        </div>
+
+    </td>
+
+    <td class="sidebar-right">
+        <!-- Oroscopo/Sondaggio già esistenti -->
+    </td>
+
+</tr>
+</table>
+</div>
+
+<script>
+function initAdmin() {
+    var cu = getCurrentUser();
+    if (!cu) {
+        document.getElementById('not-logged-section').style.display = 'block';
+        document.getElementById('logged-section').style.display = 'none';
+        return;
+    }
+    document.getElementById('not-logged-section').style.display = 'none';
+    document.getElementById('logged-section').style.display = 'block';
+    document.getElementById('admin-avatar').textContent = cu.avatar;
+    document.getElementById('admin-name').textContent = cu.name;
+    document.getElementById('admin-username').textContent = '@' + cu.username;
+
+    var myPosts = getPostsByUser(cu.username);
+    document.getElementById('my-stats').innerHTML =
+        '✏️ <strong>'+myPosts.length+'</strong> post<br>...';
+}
+
+function showSection(name) {
+    var sections = ['nuovo-post','miei-post','commenti','statistiche','guestbook-admin'];
+    sections.forEach(function(s) {
+        document.getElementById('section-' + s).classList.toggle('active', s === name);
+        var btn = document.getElementById('btn-' + s.replace('-admin',''));
+        if (btn) btn.classList.toggle('active', s === name);
+    });
+    if (name === 'miei-post') renderMieiPost();
+    if (name === 'commenti') renderCommentiAdmin();
+    if (name === 'statistiche') renderStats();
+    if (name === 'guestbook-admin') renderGuestbookAdmin();
+}
+
+function handleSavePost(e) {
+    e.preventDefault();
+    var res = saveNewPost(document.getElementById('np-title').value.trim(), document.getElementById('np-category').value, document.getElementById('np-excerpt').value.trim(), document.getElementById('np-content').value.trim(), document.getElementById('np-tags').value.trim(), document.getElementById('np-stars').value);
+    if (!res.ok) {
+        var errEl = document.getElementById('post-error');
+        errEl.textContent = '❌ ' + res.error;
+        errEl.style.display = 'block';
+    } else {
+        document.getElementById('post-success').style.display = 'block';
+        document.getElementById('np-title').value = '';
+        document.getElementById('np-excerpt').value = '';
+        document.getElementById('np-content').value = '';
+    }
+    return false;
+}
+
+function renderMieiPost() {
+    var cu = getCurrentUser();
+    var posts = getPostsByUser(cu.username);
+    document.getElementById('miei-post-list').innerHTML = posts.length === 0 ? 'Nessun post.' : posts.map(function(p){ return '<div class="data-row"><strong>'+p.title+'</strong> <button class="button-3d" onclick="deletePostLocal('+p.id+')">🗑</button></div>'; }).join('');
+}
+
+function deletePostLocal(id) {
+    if(confirm('Eliminare?')) { deletePost(id); renderMieiPost(); }
+}
+
+function renderCommentiAdmin() {
+    var cu = getCurrentUser();
+    var myPostIds = getPostsByUser(cu.username).map(p=>p.id);
+    var mine = JSON.parse(localStorage.getItem('blog_comments')||'[]').filter(c => myPostIds.includes(c.postId)).reverse();
+    document.getElementById('commenti-admin-list').innerHTML = mine.length === 0 ? 'Nessun commento.' : mine.map(c => '<div class="data-row"><strong>'+c.author+'</strong> su Post #'+c.postId+': '+c.content.substring(0,50)+'...</div>').join('');
+}
+
+// Stats/Guestbook render ... analoghi
+</script>
+</body>
+</html>
